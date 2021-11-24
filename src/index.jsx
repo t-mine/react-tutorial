@@ -50,10 +50,37 @@ export class Game extends React.Component {
       history: [
         {
           squares: Array(9).fill(null),
+          currentSquare: {
+            col: null,
+            row: null,
+          },
         },
       ],
       stepNumber: 0,
       xIsNext: true,
+    };
+  }
+
+  getCurrentSquare(i) {
+    let col;
+    let row;
+    if ([0, 1, 2].includes(i)) {
+      row = 1;
+    } else if ([3, 4, 5].includes(i)) {
+      row = 2;
+    } else if ([6, 7, 8].includes(i)) {
+      row = 3;
+    }
+    if ([0, 3, 6].includes(i)) {
+      col = 1;
+    } else if ([1, 4, 7].includes(i)) {
+      col = 2;
+    } else if ([2, 5, 8].includes(i)) {
+      col = 3;
+    }
+    return {
+      col: col,
+      row: row,
     };
   }
 
@@ -69,6 +96,7 @@ export class Game extends React.Component {
       history: history.concat([
         {
           squares: squares,
+          currentSquare: this.getCurrentSquare(i),
         },
       ]),
       stepNumber: history.length,
@@ -90,7 +118,7 @@ export class Game extends React.Component {
 
     const moves = history.map((step, move) => {
       const desc = move //
-        ? 'Go to move #' + move
+        ? `Go to move #${move} col: ${history[move].currentSquare.col} row: ${history[move].currentSquare.row}`
         : 'Got to game start';
       return (
         <li key={move}>
