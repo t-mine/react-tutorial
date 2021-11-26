@@ -143,7 +143,6 @@ export class Game extends React.Component {
     const toggle = ()=> {
       return (
         <div class="toggle-switch">
-          <label>aaa</label>
           <input id="toggle" class="toggle-input" type='checkbox' />
           <label for="toggle" class="toggle-label"/>
         </div>
