@@ -140,6 +140,16 @@ export class Game extends React.Component {
       }
     });
 
+    const toggle = ()=> {
+      return (
+        <div class="toggle-switch">
+          <label>aaa</label>
+          <input id="toggle" class="toggle-input" type='checkbox' />
+          <label for="toggle" class="toggle-label"/>
+        </div>
+      )
+    }
+
     let status;
     if (winner) {
       status = 'Winner: ' + winner;
@@ -157,6 +167,7 @@ export class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <div>{toggle()}</div>
           <ol>{moves}</ol>
         </div>
       </div>
