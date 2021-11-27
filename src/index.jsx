@@ -110,6 +110,11 @@ export class Game extends React.Component {
     });
   }
 
+  handleToggle = (e) => {
+    this.state.desc = !this.state.desc;
+    console.log(this.state.desc);
+  };
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -149,7 +154,7 @@ export class Game extends React.Component {
             className="toggle-input"
             type="checkbox"
             value="desc"
-            onChange={handleToggle}
+            onChange={(e) => this.handleToggle(e)}
           />
           <label htmlFor="toggle" className="toggle-label" />
         </div>
@@ -180,10 +185,6 @@ export class Game extends React.Component {
     );
   }
 }
-
-const handleToggle = (e) => {
-  console.log(e.target.value);
-};
 
 function calculateWinner(squares) {
   const lines = [
