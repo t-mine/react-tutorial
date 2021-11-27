@@ -56,6 +56,7 @@ export class Game extends React.Component {
       ],
       stepNumber: 0,
       xIsNext: true,
+      desc: false,
     };
   }
 
@@ -140,14 +141,20 @@ export class Game extends React.Component {
       }
     });
 
-    const toggle = ()=> {
+    const toggle = () => {
       return (
-        <div class="toggle-switch">
-          <input id="toggle" class="toggle-input" type='checkbox' />
-          <label for="toggle" class="toggle-label"/>
+        <div className="toggle-switch">
+          <input
+            id="toggle"
+            className="toggle-input"
+            type="checkbox"
+            value="desc"
+            onChange={handleToggle}
+          />
+          <label htmlFor="toggle" className="toggle-label" />
         </div>
-      )
-    }
+      );
+    };
 
     let status;
     if (winner) {
@@ -173,6 +180,10 @@ export class Game extends React.Component {
     );
   }
 }
+
+const handleToggle = (e) => {
+  console.log(e.target.value);
+};
 
 function calculateWinner(squares) {
   const lines = [
