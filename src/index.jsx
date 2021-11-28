@@ -47,6 +47,7 @@ export class Game extends React.Component {
     this.state = {
       history: [
         {
+          stepNumber: 0,
           squares: Array(9).fill(null),
           currentSquare: {
             col: null,
@@ -56,7 +57,7 @@ export class Game extends React.Component {
       ],
       stepNumber: 0,
       xIsNext: true,
-      desc: false,
+      order: 'asc',
     };
   }
 
@@ -94,6 +95,7 @@ export class Game extends React.Component {
     this.setState({
       history: history.concat([
         {
+          stepNumber: history.length,
           squares: squares,
           currentSquare: this.getCurrentSquare(i),
         },
@@ -111,26 +113,35 @@ export class Game extends React.Component {
   }
 
   handleToggle = (e) => {
-    this.state.desc = !this.state.desc;
-    console.log(this.state.desc);
+    this.setState({
+      order: this.state.order === 'asc' ? 'desc' : 'asc',
+    });
   };
 
   render() {
-    const history = this.state.history;
+    const history = [].concat(this.state.history);
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
-    const moves = history.map((step, move) => {
-      const desc = move //
-        ? `Go to move #${move} col: ${history[move].currentSquare.col} row: ${history[move].currentSquare.row}`
+    if (this.state.order === 'desc') {
+      history.sort((a, b) => {
+        if (a.stepNumber > b.stepNumber) return -1;
+        if (a.stepNumber < b.stepNumber) return 1;
+        return 0;
+      });
+    }
+
+    const moves = history.map((step) => {
+      const historyIdx =
+        this.state.order === 'desc' ? step.stepNumber - 1 : step.stepNumber;
+      const desc = step.stepNumber //
+        ? `Go to move #${step.stepNumber} col: ${history[historyIdx].currentSquare.col} row: ${history[historyIdx].currentSquare.row}`
         : 'Got to game start';
-      console.log(this.state.stepNumber);
-      console.log(move);
-      if (this.state.stepNumber === move) {
+      if (this.state.stepNumber === step.stepNumber) {
         return (
-          <li key={move}>
+          <li key={step.stepNumber}>
             <button
-              onClick={() => this.jumpTo(move)}
+              onClick={() => this.jumpTo(step.stepNumber)}
               style={{ fontWeight: 'bold' }}
             >
               {desc}
@@ -139,8 +150,8 @@ export class Game extends React.Component {
         );
       } else {
         return (
-          <li key={move}>
-            <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <li key={step.stepNumber}>
+            <button onClick={() => this.jumpTo(step.stepNumber)}>{desc}</button>
           </li>
         );
       }
