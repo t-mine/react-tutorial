@@ -4,7 +4,11 @@ import './index.css';
 
 function Square(props) {
   return (
-    <button className="square" onClick={props.onClick}>
+    <button
+      className="square"
+      id={'square-' + props.index}
+      onClick={props.onClick}
+    >
       {props.value}
     </button>
   );
@@ -17,6 +21,7 @@ class Board extends React.Component {
         value={this.props.squares[i]} //
         onClick={() => this.props.onClick(i)}
         key={i}
+        index={i}
       />
     );
   }
@@ -103,6 +108,13 @@ export class Game extends React.Component {
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
     });
+    // どちらかが勝利した際に、勝利につながった 3つのマス目をハイライトする。
+    if (calculateWinner(squares)) {
+      const line = calculateWinner(squares).line;
+      for (const val of line) {
+        document.getElementById('square-' + val).classList.add('win-line');
+      }
+    }
   }
 
   jumpTo(step) {
@@ -121,7 +133,8 @@ export class Game extends React.Component {
   render() {
     const history = [].concat(this.state.history);
     const current = history[this.state.stepNumber];
-    const winner = calculateWinner(current.squares);
+    const result = calculateWinner(current.squares);
+    const winner = result === null ? null : result.winner;
 
     if (this.state.order === 'desc') {
       history.sort((a, b) => {
@@ -211,7 +224,12 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return {
+        // O or X
+        winner: squares[a],
+        // 勝利につながった3つのマス目
+        line: lines[i],
+      };
     }
   }
   return null;

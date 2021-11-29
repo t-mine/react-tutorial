@@ -98,3 +98,7 @@ ul {
   height: 20px;
   margin: 10px;
 }
+
+.win-line {
+  background-color: chartreuse;
+}
