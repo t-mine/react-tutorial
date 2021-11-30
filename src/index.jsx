@@ -188,6 +188,8 @@ export class Game extends React.Component {
     let status;
     if (winner) {
       status = 'Winner: ' + winner;
+    } else if (calculateDraw(current.squares)) {
+      status = 'Draw';
     } else {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
@@ -233,6 +235,20 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+
+function calculateDraw(squares) {
+  if (calculateWinner(squares)) {
+    return false;
+  }
+  for (let i = 0; i < squares.length; i++) {
+    if (!squares[i]) {
+      return false;
+    } else if (i === squares.length - 1) {
+      return true;
+    }
+  }
+  return false;
 }
 
 // ========================================
